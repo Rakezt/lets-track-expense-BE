@@ -9,19 +9,9 @@ const authRoutes = require('./routes/authRoutes');
 const expenseRoutes = require('./routes/expenseRoutes');
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server, {
-  cors: {
-    origin: 'https://lets-track-expenses-ai.netlify.app',
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    credentials: true,
-  },
-});
-app.use(
-  cors({
-    origin: 'https://lets-track-expenses-ai.netlify.app',
-    credentials: true,
-  })
-);
+const io = new Server(server, { cors: { origin: '*' } });
+
+app.use(cors());
 app.use(express.json());
 
 mongoose
