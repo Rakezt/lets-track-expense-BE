@@ -1,4 +1,3 @@
-// controllers/expensesController.js
 const axios = require('axios');
 const Expense = require('../models/expenses');
 
@@ -6,7 +5,6 @@ exports.analyzeExpenses = async (req, res) => {
   let expenses = req.body.expenses;
   const query = req.body.query?.toLowerCase?.().trim();
 
-  // 1️⃣ Load from DB if `query` provided
   if (!Array.isArray(expenses)) {
     if (!query) {
       return res
@@ -28,7 +26,6 @@ exports.analyzeExpenses = async (req, res) => {
     }
   }
 
-  // 2️⃣ Render expenses as plain text for summarization
   const textToSummarize = expenses
     .map(
       (e) =>
@@ -38,7 +35,6 @@ exports.analyzeExpenses = async (req, res) => {
     )
     .join(' ');
 
-  // 3️⃣ Call Gemini API for analysis
   try {
     const geminiRes = await axios.post(
       'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent',
@@ -61,7 +57,6 @@ exports.analyzeExpenses = async (req, res) => {
       }
     );
 
-    // Gemini returns candidates[].content.parts[].text
     const insight =
       geminiRes.data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() ||
       'No insight generated';

@@ -14,13 +14,11 @@ const expenseUser = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now() },
 });
 
-//Hash password before save
 expenseUser.pre('Save', async function () {
   if (this.isModified('passwordHash')) return;
   this.passwordHash = await bcrypt.hash(this.passwordHash, 10);
 });
 
-//Compare password helper
 expenseUser.methods.verifyPassword = function (raw) {
   return bcrypt.compare(raw, this.passwordHash);
 };
